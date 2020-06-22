@@ -28,6 +28,7 @@ On all Vault servers (todo automate, this is still manual as of today):
 ```bash
 echo "7581f63b-e36b-e105-0c6d-07c534c916c4" > /etc/vault.d/snap-roleid
 echo "91919667-7587-4a69-a4f9-766358b082ac" > /etc/vault.d/snap-secretid
+chmod 0640 /etc/vault.d/snap-{roleid,secretid}
 ```
 
 ## Vault Agent Configuration
