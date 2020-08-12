@@ -116,7 +116,7 @@ cat << 'EOF' > /usr/local/bin/vault-snapshot
 #  - /etc/vault.d/vault_snapshot_agent.hcl
 #  - /etc/systemd/system/vault-agent.service
 
-VAULT_TOKEN=$(cat /tmp/vault-snap-agent-token) \
+VAULT_TOKEN=$(cat /tmp/vault-snap-agent-token) VAULT_ADDR="https://$HOSTNAME:8200" \
 /usr/local/bin/vault operator raft snapshot save "/opt/vault/snapshots/vault-raft_$(date +%F-%H%M).snapshot"
 EOF
 ```
