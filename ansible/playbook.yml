@@ -1,0 +1,5 @@
+---
+
+- hosts: vault
+  roles:
+    - { role: vault-raft-backup-agent, tags: vault-raft-backup-agent }

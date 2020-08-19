@@ -1,0 +1,68 @@
+---
+
+- name: write roleid
+  copy:
+    dest: '{{ vault_snapshot_approle_roleid_file }}'
+    content: '{{ vault_raft_bck_role_id }}'
+    mode: '0640'
+    owner: '{{ vault_user }}'
+    group: '{{ vault_group }}'
+
+- name: write secretid
+  # no_log: yes
+  copy:
+    dest: '{{ vault_snapshot_approle_secretid_file }}'
+    content: '{{ vault_raft_bck_secret_id }}'
+    mode: '0640'
+    owner: '{{ vault_user }}'
+    group: '{{ vault_group }}'
+
+- name: write snapshot agent configuration file
+  template:
+    src: '{{ vault_snapshot_agent_config_file_template }}'
+    dest: '{{ vault_snapshot_agent_config_file }}'
+    mode: '0640'
+    owner: '{{ vault_user }}'
+    group: '{{ vault_group }}'
+
+# Vault backup agent systemd config
+- name: create systemd service file for backup agent
+  template:
+    src: 'templates{{ vault_snapshot_systemd_dir }}/{{ vault_snapshot_systemd_service_name }}.j2'
+    dest: '{{ vault_snapshot_systemd_dir }}/{{ vault_snapshot_systemd_service_name }}'
+  notify:
+    - daemon reload
+
+- name: start and enable systemd service
+  service:
+    name: '{{ vault_snapshot_systemd_service_name }}'
+    enabled: yes
+    state: started
+
+# Timer systemd config
+- name: create systemd timer service file for snapshot service
+  template:
+    src: 'templates{{ vault_snapshot_systemd_dir }}/{{ vault_snapshot_systemd_timer_service_name }}.j2'
+    dest: '{{ vault_snapshot_systemd_dir }}/{{ vault_snapshot_systemd_timer_service_name }}'
+  notify:
+    - daemon reload
+
+- name: create systemd timer file for snapshot service
+  template:
+    src: 'templates{{ vault_snapshot_systemd_dir }}/{{ vault_snapshot_systemd_timer_name }}.j2'
+    dest: '{{ vault_snapshot_systemd_dir }}/{{ vault_snapshot_systemd_timer_name }}'
+  notify:
+    - daemon reload
+
+- name: ensure snapshot directory exists
+  file:
+    path: '{{ vault_snapshot_dir }}'
+    state: directory
+    mode: '0755'
+    owner: '{{ vault_user }}'
+    group: '{{ vault_group }}'
+
+- name: start systemd timer
+  service:
+    name: '{{ vault_snapshot_systemd_timer_name }}'
+    state: started

@@ -1,0 +1,73 @@
+---
+
+# Vault configuration directory
+vault_snapshot_config_dir: '/etc/vault.d'
+# Name for pid file
+vault_snapshot_pid_file_name: 'vault-raft-backup-agent.pid'
+# Location of pid file
+vault_snapshot_pid_dir: '{{ vault_snapshot_config_dir }}'
+
+# Vault API address
+vault_address: '127.0.0.1'
+# Vault API tls, choosing 'no' here will change the protocol
+# for vault_address from 'http' (default, for dev server) to 'https'
+vault_tls_disable: yes
+
+# Vault snapshot agent config file destination on remote host
+vault_snapshot_agent_config_file: '{{ vault_snapshot_config_dir }}/vault_snapshot_agent.hcl'
+# Vault snapshot agent config file template
+vault_snapshot_agent_config_file_template: 'templates{{ vault_snapshot_config_dir }}/vault_snapshot_agent.hcl.j2'
+
+# Systemd directory for service and timer files on remote host
+vault_snapshot_systemd_dir: '/etc/systemd/system'
+# Systemd service name for snapshot agent
+vault_snapshot_systemd_service_name: 'vault-raft-backup-agent.service'
+
+# Systemd timer name
+vault_snapshot_systemd_timer_name: 'vault-snap-agent.timer'
+# Systemd timer service name; this service performs the actual snapshotting
+vault_snapshot_systemd_timer_service_name: 'vault-snap-agent.service'
+# Systemd timer OnActiveSec, run 1s after activation
+vault_snapshot_systemd_timer_onactivesec: '1s'
+# Systemd timer OnUnitActiveSec, run monotonic timer every hour after activation
+vault_snapshot_systemd_timer_onunitactivesec: '1h'
+# Systemd timer description
+vault_snapshot_systemd_timer_description: 'Vault integrated storage snapshot'
+
+# Owner/Group for configuration directory and files
+vault_user: vault
+vault_group: vault
+
+# Path to vault binary
+vault_bin_path: '/usr/local/bin'
+
+# path to roleid and secretid files for AppRole auth
+vault_snapshot_approle_roleid_file: '{{ vault_snapshot_config_dir }}/snap-roleid'
+vault_snapshot_approle_secretid_file: '{{ vault_snapshot_config_dir }}/snap-secretid'
+
+# This can be set to false to disable the default behavior
+# of removing the secret ID file after it's been read:
+# https://www.vaultproject.io/docs/agent/autoauth/methods/approle#remove_secret_id_file_after_reading
+remove_secret_id_file_after_reading: no
+# The snapshot service will no longer find a valid token if you set this to 'yes'
+# TODO: Consider using an additional listener for the Vault agent with `use_auto_auth_token=true`
+
+# Location of the Vault token, ideally a ramdisk, see also:
+# https://www.vaultproject.io/docs/agent/autoauth/sinks/file
+vault_snapshot_token_location: '/tmp/vault-raft-backup-agent-token'
+# Set to 0000 to prevent Vault from modifying the file mode
+# The file is currently written with 0640 permissions as default
+vault_snapshot_token_mode: '0000'
+
+# Snapshot output directory
+vault_snapshot_dir: '/opt/vault/snapshots'
+# Snapshot file name format
+vault_snapshot_file_name: 'vault-raft_$(date +%F-%H%M).snapshot'
+
+# Snapshot retention find time filter,
+# one of 'mtime' or 'atime', see `man find`
+vault_snapshot_retention_find_mode: 'mtime'
+# Snapshot retention, data was last modified/accessed 7*24 hours ago
+vault_snapshot_retention_time: '+7'
+# Action to take on expired files
+vault_snapshot_retention_find_action: 'rm'

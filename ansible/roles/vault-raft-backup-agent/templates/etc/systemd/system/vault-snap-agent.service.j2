@@ -1,0 +1,14 @@
+[Unit]
+Description={{ vault_snapshot_systemd_timer_description }}
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c ' \
+  VAULT_TOKEN=$(cat {{ vault_snapshot_token_location }}) \
+  VAULT_ADDR="{{ vault_tls_disable | ternary('http', 'https') }}://{{ vault_address }}:8200" \
+  {{ vault_bin_path }}/vault operator raft snapshot save "{{ vault_snapshot_dir }}/{{ vault_snapshot_file_name }}" \
+'
+ExecStartPost=/bin/sh -c 'find {{ vault_snapshot_dir }}/* -{{ vault_snapshot_retention_find_mode }} {{ vault_snapshot_retention_time }} -exec {{ vault_snapshot_retention_find_action }} {} \;'
+
+[Install]
+WantedBy=multi-user.target

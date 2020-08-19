@@ -1,0 +1,15 @@
+[Unit]
+Description=Vault Agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart={{ vault_bin_path }}/vault agent -config {{ vault_snapshot_agent_config_file }}
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+User={{ vault_user }}
+Group={{ vault_group }}
+
+[Install]
+WantedBy=multi-user.target
