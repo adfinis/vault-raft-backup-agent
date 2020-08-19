@@ -46,7 +46,7 @@ resource "null_resource" "update_appid" {
   }
   provisioner "local-exec" {
       # Write the new roleid to the Ansible vars file
-      command = "echo -n \"${var.ansible_roleid_variable_name}: '${vault_approle_auth_backend_role.role.role_id}'\" >> \"${var.ansible_variable_dir}/${var.ansible_variable_file}\""
+      command = "echo \"${var.ansible_roleid_variable_name}: '${vault_approle_auth_backend_role.role.role_id}'\" >> \"${var.ansible_variable_dir}/${var.ansible_variable_file}\""
   }
 }
 
