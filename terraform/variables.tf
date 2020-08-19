@@ -22,10 +22,10 @@ variable "ansible_vault_id" {
     default = "../ansible/vault-pass"
 }
 
-variable "ansible_play_dir" {
+variable "ansible_variable_dir" {
     type = string
-    description = "The relative path to the Ansible playbook directory"
-    default = "../ansible"
+    description = "The relative path to the Ansible variable directory"
+    default = "../ansible/roles/vault-raft-backup-agent/vars"
 }
 
 variable "ansible_vars_file_secret_id" {

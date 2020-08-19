@@ -48,11 +48,11 @@ resource "null_resource" "update_appid" {
       # Prepare directory for Ansible play variables
       # Play vars can be overridden with group or host vars, see also:
       # https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
-      command = "mkdir -p '${var.ansible_play_dir}/vars'"
+      command = "mkdir -p '${var.ansible_variable_dir}'"
   }
   provisioner "local-exec" {
       # Write the new roleid to the Ansible vars file
-      command = "echo -n \"${var.ansible_roleid_variable_name}: '${data.vault_approle_auth_backend_role_id.role.role_id}'\" > \"${var.ansible_play_dir}/vars/${var.ansible_vars_file_role_id}\""
+      command = "echo -n \"${var.ansible_roleid_variable_name}: '${data.vault_approle_auth_backend_role_id.role.role_id}'\" > \"${var.ansible_variable_dir}/${var.ansible_vars_file_role_id}\""
   }
 }
 
@@ -63,14 +63,14 @@ resource "null_resource" "update_secretid" {
       key_id   = vault_approle_auth_backend_role_secret_id.secretid.id
   }
   provisioner "local-exec" {
-      command = "mkdir -p '${var.ansible_play_dir}/vars'"
+      command = "mkdir -p '${var.ansible_variable_dir}'"
   }
   provisioner "local-exec" {
       # Encrypt the secretid and write to the Ansible vars file
       command = <<EOT
   echo -n "${vault_approle_auth_backend_role_secret_id.secretid.secret_id}" \
     | ansible-vault encrypt_string --vault-id "${var.ansible_vault_id}" --stdin-name "${var.ansible_secretid_variable_name}" \
-    > "${var.ansible_play_dir}/vars/${var.ansible_vars_file_secret_id}"
+    > "${var.ansible_variable_dir}/${var.ansible_vars_file_secret_id}"
   EOT
   }
 }
