@@ -25,12 +25,9 @@ $ ansible-playbook playbook.yml -i inventory
 
 ### Check Snapshot Job Status
 
-
 ```bash
-
-
+$ systemctl list-timers
 ```
-
 
 ## Limitations
 The Ansible role comes with the following limitations:
