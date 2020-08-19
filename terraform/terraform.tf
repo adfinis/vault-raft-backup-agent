@@ -29,6 +29,7 @@ resource "vault_approle_auth_backend_role" "role" {
   backend   = vault_auth_backend.approle.path
   role_name = var.approle_role_id
   token_policies  = ["${var.snapshot_role_policy_name}"]
+  token_ttl = var.approle_role_token_ttl
 }
 
 # AppRole secretid

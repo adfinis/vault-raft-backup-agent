@@ -10,6 +10,12 @@ variable "approle_role_id" {
     default = "vault-snap-agent"
 }
 
+variable "approle_role_token_ttl" {
+    type = string
+    description = "TTL in seconds for snapshot role tokens"
+    default = 7200
+}
+
 variable "ansible_vault_id" {
     type = string
     description = "Location of the ansible-vault password file relative to this folder"
