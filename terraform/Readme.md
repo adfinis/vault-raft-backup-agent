@@ -62,7 +62,7 @@ terraform import vault_auth_backend.approle $APPROLE_PATH
 $ terraform state list
 vault_auth_backend.approle
 
-# Execute a plan to see the dif
+# Execute a plan to see the diff
 $ terraform plan -target=vault_auth_backend.approle
   # vault_auth_backend.approle will be updated in-place
   ~ resource "vault_auth_backend" "approle" {
