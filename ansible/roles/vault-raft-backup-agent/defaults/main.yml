@@ -41,6 +41,12 @@ vault_group: vault
 # Path to vault binary
 vault_bin_path: '/usr/local/bin'
 
+# Variables for actual AppRole roleid and secretid. These variables can be defined
+# manually or generated with the terraform configuration from this repo.
+# Use Ansible Vault to encrypt the secretid.
+vault_raft_bck_role_id: ''
+vault_raft_bck_secret_id: 'sensitive'
+
 # path to roleid and secretid files for AppRole auth
 vault_snapshot_approle_roleid_file: '{{ vault_snapshot_config_dir }}/snap-roleid'
 vault_snapshot_approle_secretid_file: '{{ vault_snapshot_config_dir }}/snap-secretid'
