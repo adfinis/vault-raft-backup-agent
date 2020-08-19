@@ -94,8 +94,8 @@ resource "vault_auth_backend" "approle" {
 terraform import vault_auth_backend.approle $APPROLE_PATH
 
 # Proceed similarly with any other resources for import, e.g., the AppRole role
-APPROLE_PATH=auth/approle/role/existing-snapshot-approle-role
-terraform import vault_approle_auth_backend_role.example $PATH
+ROLE_PATH=auth/approle/role/existing-snapshot-approle-role
+terraform import vault_approle_auth_backend_role.example $ROLE_PATH
 ```
 
 See also: https://www.terraform.io/docs/providers/vault/r/approle_auth_backend_role.html#import
