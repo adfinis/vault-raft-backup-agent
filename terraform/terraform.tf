@@ -1,11 +1,5 @@
 provider "vault" {}
 
-# Data source to retrieve AppRole role id
-data "vault_approle_auth_backend_role_id" "role" {
-  backend   = vault_auth_backend.approle.path
-  role_name = var.approle_role_id
-}
-
 # Policy for creating Raft snapshots
 data "vault_policy_document" "raft" {
   rule {
@@ -52,7 +46,7 @@ resource "null_resource" "update_appid" {
   }
   provisioner "local-exec" {
       # Write the new roleid to the Ansible vars file
-      command = "echo -n \"${var.ansible_roleid_variable_name}: '${data.vault_approle_auth_backend_role_id.role.role_id}'\" >> \"${var.ansible_variable_dir}/${var.ansible_variable_file}\""
+      command = "echo -n \"${var.ansible_roleid_variable_name}: '${vault_approle_auth_backend_role.role.role_id}'\" >> \"${var.ansible_variable_dir}/${var.ansible_variable_file}\""
   }
 }
 
