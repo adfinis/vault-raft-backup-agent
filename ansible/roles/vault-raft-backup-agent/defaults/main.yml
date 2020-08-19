@@ -54,9 +54,7 @@ vault_snapshot_approle_secretid_file: '{{ vault_snapshot_config_dir }}/snap-secr
 # This can be set to false to disable the default behavior
 # of removing the secret ID file after it's been read:
 # https://www.vaultproject.io/docs/agent/autoauth/methods/approle#remove_secret_id_file_after_reading
-remove_secret_id_file_after_reading: no
-# The snapshot service will no longer find a valid token if you set this to 'yes'
-# TODO: Consider using an additional listener for the Vault agent with `use_auto_auth_token=true`
+remove_secret_id_file_after_reading: yes
 
 # Location of the Vault token, ideally a ramdisk, see also:
 # https://www.vaultproject.io/docs/agent/autoauth/sinks/file
