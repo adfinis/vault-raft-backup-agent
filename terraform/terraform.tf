@@ -52,7 +52,7 @@ resource "null_resource" "update_appid" {
   }
   provisioner "local-exec" {
       # Write the new roleid to the Ansible vars file
-      command = "echo -n \"${var.ansible_roleid_variable_name}: '${data.vault_approle_auth_backend_role_id.role.role_id}'\" > \"${var.ansible_variable_dir}/${var.ansible_vars_file_role_id}\""
+      command = "echo -n \"${var.ansible_roleid_variable_name}: '${data.vault_approle_auth_backend_role_id.role.role_id}'\" >> \"${var.ansible_variable_dir}/${var.ansible_variable_file}\""
   }
 }
 
@@ -70,7 +70,7 @@ resource "null_resource" "update_secretid" {
       command = <<EOT
   echo -n "${vault_approle_auth_backend_role_secret_id.secretid.secret_id}" \
     | ansible-vault encrypt_string --vault-id "${var.ansible_vault_id}" --stdin-name "${var.ansible_secretid_variable_name}" \
-    > "${var.ansible_variable_dir}/${var.ansible_vars_file_secret_id}"
+    >> "${var.ansible_variable_dir}/${var.ansible_variable_file}"
   EOT
   }
 }

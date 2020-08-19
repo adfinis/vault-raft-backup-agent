@@ -1,2 +1,3 @@
 ansible_vault_id = "../ansible-vault/vault-pass"
-ansible_play_dir = "../ansible-vault"
+#ansible_variable_dir = "../ansible/roles/vault-raft-backup-agent/vars"
+ansible_variable_dir = "../ansible/group_vars/vault/"

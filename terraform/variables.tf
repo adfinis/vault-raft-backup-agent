@@ -28,16 +28,10 @@ variable "ansible_variable_dir" {
     default = "../ansible/roles/vault-raft-backup-agent/vars"
 }
 
-variable "ansible_vars_file_secret_id" {
+variable "ansible_variable_file" {
     type = string
-    description = "The name of the Ansible vars file that holds the secret id"
-    default = "raft-backup-secretid.yml"
-}
-
-variable "ansible_vars_file_role_id" {
-    type = string
-    description = "The name of the Ansible vars file that holds the role id"
-    default = "raft-backup-roleid.yml"
+    description = "The name of the Ansible vars file"
+    default = "main.yml"
 }
 
 variable "ansible_roleid_variable_name" {
