@@ -169,7 +169,7 @@ s3cmd mb s3://raft-snapshots
 
 Add s3cmd sync to `vault-snapshot`:
 ```bash
-echo "5 * * * * root /usr/bin/s3cmd sync /opt/vault/snapshots/* s3://raft-snapshots" >> /usr/local/bin/vault-snapshot
+echo "/usr/bin/s3cmd sync /opt/vault/snapshots/* s3://raft-snapshots" >> /usr/local/bin/vault-snapshot
 ```
 
 ## Retention
