@@ -66,7 +66,7 @@ vault_snapshot_token_mode: '0000'
 # Snapshot output directory
 vault_snapshot_dir: '/opt/vault/snapshots'
 # Snapshot file name format
-vault_snapshot_file_name: 'vault-raft_$(date +%F-%H%M).snapshot'
+vault_snapshot_file_name: 'vault-raft_$(date +%%F-%%H%%M).snapshot'
 
 # Snapshot retention find time filter,
 # one of 'mtime' or 'atime', see `man find`
