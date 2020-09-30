@@ -9,7 +9,7 @@
     group: '{{ vault_group }}'
 
 - name: write secretid
-  # no_log: yes
+  no_log: yes
   copy:
     dest: '{{ vault_snapshot_approle_secretid_file }}'
     content: '{{ vault_raft_bck_secret_id }}'
