@@ -39,8 +39,6 @@ Configure the vault agent for the snapshots:
 cat << EOF > /etc/vault.d/vault_snapshot_agent.hcl 
 # Vault agent configuration for Raft snapshots
 
-pid_file = "/etc/vault.d/vault-snap-agent.pid"
-
 vault {
   address = "https://$HOSTNAME:8200"
 }
@@ -66,7 +64,7 @@ auto_auth {
     config = {
       # best practice to write the file to a ramdisk (0640)
       # have a look at wrapped token for advanced configuration
-      path = "/tmp/vault-snap-agent-token"
+      path = "/run/vault-snap-agent/token"
     }
   }
 }
@@ -79,17 +77,20 @@ Configure the systemd service for the snapshot agent:
 ```bash
 cat << EOF > /etc/systemd/system/vault-snap-agent.service
 [Unit]
-Description=Vault Agent
+Description=Vault Snapshot Agent
 Requires=network-online.target
 After=network-online.target
+ConditionFileNotEmpty=/etc/vault.d/vault.hcl
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/local/bin/vault agent -config /etc/vault.d/vault_snapshot_agent.hcl
+ExecStart=/usr/local/bin/vault agent -config=/etc/vault.d/vault_snapshot_agent.hcl
 ExecReload=/bin/kill -HUP $MAINPID
-KillSignal=SIGTERM
+KillSignal=SIGINT
 User=vault
 Group=vault
+RuntimeDirectoryMode=0750
+RuntimeDirectory=vault-snap-agent
 
 [Install]
 WantedBy=multi-user.target
@@ -116,7 +117,7 @@ cat << 'EOF' > /usr/local/bin/vault-snapshot
 #  - /etc/vault.d/vault_snapshot_agent.hcl
 #  - /etc/systemd/system/vault-agent.service
 
-VAULT_TOKEN=$(cat /tmp/vault-snap-agent-token) VAULT_ADDR="https://$HOSTNAME:8200" \
+VAULT_TOKEN=$(cat /run/vault-snap-agent/token) VAULT_ADDR="https://$HOSTNAME:8200" \
 /usr/local/bin/vault operator raft snapshot save "/opt/vault/snapshots/vault-raft_$(date +%F-%H%M).snapshot"
 EOF
 ```
