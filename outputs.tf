@@ -4,7 +4,7 @@ output "role-id" {
 
 
 output "secret-id" {
-  value = vault_approle_auth_backend_role_secret_id.id
+  value     = vault_approle_auth_backend_role_secret_id.id
   sensitive = true
 }
 
