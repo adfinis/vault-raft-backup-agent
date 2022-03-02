@@ -1,4 +1,6 @@
-# Ansible Vault password file
+# Ansible Vault password file. The source can be a prompt, a file,
+# or a script, depending on how you are storing your vault passwords:
+# https://docs.ansible.com/ansible/latest/user_guide/vault.html
 ansible_vault_id = "../ansible-vault/vault-pass"
 
 # example: adding the vars to the role path
