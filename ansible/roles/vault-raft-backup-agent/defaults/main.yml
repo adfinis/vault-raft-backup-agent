@@ -12,6 +12,15 @@ vault_address: '127.0.0.1'
 # Vault API tls, choosing 'no' here will change the protocol
 # for vault_address from 'http' (default, for dev server) to 'https'
 vault_tls_disable: yes
+# Path on the local disk to a single PEM-encoded CA certificate to verify the Vault server's SSL certificate
+# only one of vault_ca_cert or vault_ca_path should be used
+vault_ca_cert: ""
+# Path on the local disk to a directory of PEM-encoded CA certificates to verify the Vault server's SSL certificate
+vault_ca_path: ""
+# Name to use as the SNI host when connecting via TLS
+vault_tls_server_name: ""
+# Disable verification of TLS certificates. Using this option is highly discouraged as it decreases the security of data transmissions to and from the Vault server
+vault_tls_skip_verify: no
 
 # Vault snapshot agent config file destination on remote host
 vault_snapshot_agent_config_file: '{{ vault_snapshot_config_dir }}/vault_snapshot_agent.hcl'
