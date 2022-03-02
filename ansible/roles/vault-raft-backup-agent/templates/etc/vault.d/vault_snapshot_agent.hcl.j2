@@ -1,0 +1,34 @@
+# Vault agent configuration for Raft snapshots
+
+pid_file = "{{ vault_snapshot_pid_dir }}/{{ vault_snapshot_pid_file_name }}"
+
+vault {
+  address = "{{ vault_tls_disable | ternary('http', 'https') }}://{{ vault_address }}:8200"
+}
+
+auto_auth {
+  method {
+    # Authenticate with AppRole
+    # https://www.vaultproject.io/docs/agent/autoauth/methods/approle
+    type      = "approle"
+
+    config = {
+      role_id_file_path = "{{ vault_snapshot_approle_roleid_file }}"
+      secret_id_file_path = "{{ vault_snapshot_approle_secretid_file }}"
+      remove_secret_id_file_after_reading = {{ remove_secret_id_file_after_reading | bool | lower }}
+    }
+  }
+
+  sink {
+    # write Vault token to file
+    # https://www.vaultproject.io/docs/agent/autoauth/sinks/file
+    type = "file"
+
+    config = {
+      # best practice to write the file to a ramdisk (0640)
+      # have a look at wrapped token for advanced configuration
+      path = "{{ vault_snapshot_token_location }}"
+      mode = {{ vault_snapshot_token_mode }}
+    }
+  }
+}

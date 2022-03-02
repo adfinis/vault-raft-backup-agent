@@ -1,0 +1,11 @@
+[Unit]
+Description={{ vault_snapshot_systemd_timer_description }}
+
+[Timer]
+Unit={{ vault_snapshot_systemd_timer_service_name }}
+
+OnActiveSec={{ vault_snapshot_systemd_timer_onactivesec }}
+OnUnitActiveSec={{ vault_snapshot_systemd_timer_onunitactivesec }}
+
+[Install]
+WantedBy=timers.target
