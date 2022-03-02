@@ -4,9 +4,9 @@ pid_file = "{{ vault_snapshot_pid_dir }}/{{ vault_snapshot_pid_file_name }}"
 
 vault {
   address = "{{ vault_tls_disable | ternary('http', 'https') }}://{{ vault_address }}:8200"
-  {% if vault_ca_cert %}ca_cert = "{{ vault_ca_cert }}"{% endif %}
-  {% if vault_ca_path %}ca_path = "{{ vault_ca_path }}"{% endif %}
-  {% if vault_tls_server_name %}tls_server_name = "{{ vault_tls_server_name }}"{% endif %}
+  {%- if vault_ca_cert -%}ca_cert = "{{ vault_ca_cert }}"{% endif %}
+  {%- if vault_ca_path -%}ca_path = "{{ vault_ca_path }}"{% endif %}
+  {%- if vault_tls_server_name -%}tls_server_name = "{{ vault_tls_server_name }}"{% endif %}
   tls_skip_verify = "{{ vault_tls_skip_verify | ternary('true', 'false') }}"
 }
 
