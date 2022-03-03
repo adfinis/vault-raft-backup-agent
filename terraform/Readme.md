@@ -14,7 +14,7 @@ The Terraform configuration assumes that the following Ansible var files should 
 
 | Description | Terraform Variable forming the Ansible Path | Variable Default Value |
 | --- | --- | --- |
-| The path of the roleid Ansible variable | `${ansible_play_dir}/vars/${ansible_vars_file_role_id}` | `../ansible/raft-backup-roleid.yml` | 
+| The path of the roleid Ansible variable | `${ansible_play_dir}/vars/${ansible_vars_file_role_id}` | `../ansible/raft-backup-roleid.yml` |
 | The path of the secretid Ansible variable |`${ansible_play_dir}/vars/${ansible_vars_file_secret_id}` | `../ansible/raft-backup-secretid.yml` |
 | The location of the password file for Ansible Vault | `ansible_vault_id` | `../ansible/vault-pass` |
 
@@ -26,8 +26,8 @@ Notes:
 ## Usage
 
 ```bash
-# copy and adapt the variables
-$ cp terraform.tfvars{.example,}
+# review the variables
+$ cat terraform.tfvars
 
 # configure access credentials, see also
 # https://www.terraform.io/docs/providers/vault/index.html
