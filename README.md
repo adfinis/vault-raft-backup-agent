@@ -4,6 +4,10 @@ The problem: [Snapshot automation](https://learn.hashicorp.com/vault/operations/
 
 A suggested solution: The Vault Agent and the snapshot cronjob can be deployed on a remote backup server or on the Vault instances itself.
 
+## Prerequisites
+
+The automation code (Ansible playbook and Terraform) does not automatically [install the Vault binary](https://learn.hashicorp.com/tutorials/vault/getting-started-install).
+
 ## Vault Policy
 
 Policy for the snapshot agent:
