@@ -22,7 +22,7 @@ This policy is included in the [./terraform](./terraform) code.
 
 ## AppRole Authentication
 
-This manual steps for AppRole authentication are automated in the [./terraform](./terraform) code.
+These manual steps for AppRole authentication are automated in the [./terraform](./terraform) code.
 
 Enable AppRole and create the `vault-snap-agent` role:
 ```bash
