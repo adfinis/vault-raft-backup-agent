@@ -5,6 +5,8 @@
     path: '{{ vault_snapshot_config_dir }}'
     state: directory
     mode: '0700'
+    owner: '{{ vault_user }}'
+    group: '{{ vault_group }}'
 
 - name: write roleid
   copy:
