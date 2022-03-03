@@ -1,5 +1,11 @@
 ---
 
+- name: ensure Vault snapshot config dir
+  file:
+    path: '{{ vault_snapshot_config_dir }}'
+    state: directory
+    mode: '0700'
+
 - name: write roleid
   copy:
     dest: '{{ vault_snapshot_approle_roleid_file }}'
