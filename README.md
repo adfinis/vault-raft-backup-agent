@@ -4,25 +4,18 @@ The problem: [Snapshot automation](https://learn.hashicorp.com/vault/operations/
 
 A suggested solution: The Vault Agent and the snapshot cronjob can be deployed on a remote backup server or on the Vault instances itself.
 
-## Vault Policy
+## Terraform enable, create approle
 
-Policy for the snapshot agent (todo TF config):
+This Terraform code enables approle authentication, creates a policy for raft snapshots, creates an approle for snapshots and attaches the snapshot policy to it. Then it also creates a secret-id for that app role.
 ```bash
-echo '
-path "sys/storage/raft/snapshot" {
-   capabilities = ["read"]
-}' | vault policy write snapshot -
-```
-## AppRole Authentication
+export VAULT_TOKEN=YOUR_VAULT_TOKEN
+terraform init
+terraform plan -out approle.plan
+terraform apply approle.plan
+terraform output --json | jq -r '."role-id"."value"' # sudo tee vault-host:/etc/vault.d/snap-roleid
+# this is needed see https://discuss.hashicorp.com/t/how-to-show-sensitive-values/24076 and https://www.terraform.io/language/values/outputs
+terraform output --json | jq -r '."secret-id"."value"."secret_id"'
 
-Enable AppRole and create the `vault-snap-agent` role (todo TF config):
-```bash
-vault auth enable approle
-vault write auth/approle/role/vault-snap-agent token_ttl=2h token_policies=snapshot
-#vault read auth/approle/role/vault-snap-agent
-vault read auth/approle/role/vault-snap-agent/role-id -format=json | jq -r .data.role_id # sudo tee vault-host:/etc/vault.d/snap-roleid
-vault write -f auth/approle/role/vault-snap-agent/secret-id -format=json | jq -r .data.secret_id # sudo tee vault-host:/etc/vault.d/snap-secretid
-```
 
 On all Vault servers (todo automate, this is still manual as of today):
 ```bash
