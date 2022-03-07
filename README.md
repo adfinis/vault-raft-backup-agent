@@ -4,18 +4,27 @@ The problem: [Snapshot automation](https://learn.hashicorp.com/vault/operations/
 
 A suggested solution: The Vault Agent and the snapshot cronjob can be deployed on a remote backup server or on the Vault instances itself.
 
+## Prerequisites
+
+The automation code (Ansible playbook and Terraform) does not automatically [install the Vault binary](https://learn.hashicorp.com/tutorials/vault/getting-started-install).
+
 ## Vault Policy
 
-Policy for the snapshot agent (todo TF config):
+Policy for the snapshot agent:
 ```bash
 echo '
 path "sys/storage/raft/snapshot" {
    capabilities = ["read"]
 }' | vault policy write snapshot -
 ```
+
+This policy is included in the [./terraform](./terraform) code.
+
 ## AppRole Authentication
 
-Enable AppRole and create the `vault-snap-agent` role (todo TF config):
+These manual steps for AppRole authentication are automated in the [./terraform](./terraform) code.
+
+Enable AppRole and create the `vault-snap-agent` role:
 ```bash
 vault auth enable approle
 vault write auth/approle/role/vault-snap-agent token_ttl=2h token_policies=snapshot
@@ -24,7 +33,7 @@ vault read auth/approle/role/vault-snap-agent/role-id -format=json | jq -r .data
 vault write -f auth/approle/role/vault-snap-agent/secret-id -format=json | jq -r .data.secret_id # sudo tee vault-host:/etc/vault.d/snap-secretid
 ```
 
-On all Vault servers (todo automate, this is still manual as of today):
+On all Vault servers:
 ```bash
 echo "7581f63b-e36b-e105-0c6d-07c534c916c4" > /etc/vault.d/snap-roleid
 echo "91919667-7587-4a69-a4f9-766358b082ac" > /etc/vault.d/snap-secretid
@@ -36,7 +45,7 @@ chown vault:vault /etc/vault.d/snap-{roleid,secretid}
 
 Configure the vault agent for the snapshots:
 ```bash
-cat << EOF > /etc/vault.d/vault_snapshot_agent.hcl 
+cat << EOF > /etc/vault.d/vault_snapshot_agent.hcl
 # Vault agent configuration for Raft snapshots
 
 vault {
@@ -160,7 +169,7 @@ wget <s3cmd-release-url>
 tar xvf s3cmd-x.x.x.tar.gz
 cd s3cmd-x.x.x
 python setup.py install
-``` 
+```
 
 Configure s3cmd:
 ```

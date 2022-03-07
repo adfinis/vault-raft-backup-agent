@@ -34,3 +34,4 @@ The Ansible role comes with the following limitations:
 
 * Does not configure a cron job, only a systemd timer/service pair
 * Exposes a Vault token on the snapshot host (with limited privileges though)
+* Does not automatically [install the Vault binary](https://learn.hashicorp.com/tutorials/vault/getting-started-install)
