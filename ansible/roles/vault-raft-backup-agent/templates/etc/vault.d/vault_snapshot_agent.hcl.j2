@@ -29,16 +29,15 @@ auto_auth {
     }
   }
 
-  sink {
-    # write Vault token to file
-    # https://www.vaultproject.io/docs/agent/autoauth/sinks/file
-    type = "file"
+  cache {
+    # Authenticate all requests automatically with the auto_auth token
+    # https://developer.hashicorp.com/vault/docs/agent/caching
+    use_auto_auth_token = true
+  }
 
-    config = {
-      # best practice to write the file to a ramdisk (0640)
-      # have a look at wrapped token for advanced configuration
-      path = "{{ vault_snapshot_token_location }}"
-      mode = {{ vault_snapshot_token_mode }}
-    }
+  listener "tcp" {
+    # Expose Vault-API seperately
+    # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
+    address = "127.0.0.1:8222"
   }
 }
