@@ -65,16 +65,16 @@ auto_auth {
     }
   }
 
-  sink {
-    # write Vault token to file
-    # https://www.vaultproject.io/docs/agent/autoauth/sinks/file
-    type = "file"
+  cache {
+    # Authenticate all requests automatically with the auto_auth token
+    # https://developer.hashicorp.com/vault/docs/agent/caching
+    use_auto_auth_token = true
+  }
 
-    config = {
-      # best practice to write the file to a ramdisk (0640)
-      # have a look at wrapped token for advanced configuration
-      path = "/run/vault-snap-agent/token"
-    }
+  listener "tcp" {
+    # Expose Vault-API seperately
+    # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
+    address = "127.0.0.1:8222"
   }
 }
 EOF
@@ -126,7 +126,7 @@ cat << 'EOF' > /usr/local/bin/vault-snapshot
 #  - /etc/vault.d/vault_snapshot_agent.hcl
 #  - /etc/systemd/system/vault-agent.service
 
-VAULT_TOKEN=$(cat /run/vault-snap-agent/token) VAULT_ADDR="https://$HOSTNAME:8200" \
+VAULT_ADDR="http://127.0.0.1:8222" \
 /usr/local/bin/vault operator raft snapshot save "/opt/vault/snapshots/vault-raft_$(date +%F-%H%M).snapshot"
 EOF
 ```
