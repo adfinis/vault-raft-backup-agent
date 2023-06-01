@@ -8,6 +8,7 @@ metadata:
   name: vault-snapshot
 spec:
   jobTemplate:
+    schedule: 0 4 * * *
     metadata:
       labels:
         app.kubernetes.io/name: vault-snapshot
