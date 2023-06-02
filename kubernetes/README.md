@@ -1,4 +1,4 @@
-# Cronjob for snapshoting a vault running on Kubernetes
+# Cronjob for snapshotting Vault running on Kubernetes
 
 This assumes kubernetes authentication backend is configured on vault.
 
