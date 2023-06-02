@@ -45,3 +45,6 @@ spec:
                   name: vault-snapshot-credentials
               image: ghcr.io/adfinis/vault-snapshot:0.1.-0
             imagePullPolicy: IfNotPresent
+            volumes:
+            - name: backup-dir
+              emptyDir: {}
