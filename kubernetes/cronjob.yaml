@@ -1,0 +1,55 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: vault-snapshot
+    app.kubernetes.io/version: v0.1.0
+  name: vault-snapshot
+spec:
+  jobTemplate:
+    schedule: 0 4 * * *
+    metadata:
+      labels:
+        app.kubernetes.io/name: vault-snapshot
+        app.kubernetes.io/version: v0.1.0
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: vault-snapshot
+            app.kubernetes.io/version: v0.1.0
+        spec:
+          automountServiceAccountToken: true
+          serviceAccountName: vault-raft-snapshot
+          containers:
+          - name: vault-snapshot
+            env:
+            - name: S3_HOST
+              value: s3.example.com
+            - name: S3_BUCKET
+              value: bucketname
+            - name: S3_URI
+              value: s3://bucketname
+            - name: VAULT_ROLE
+              value: vault-snapshot
+            - name: VAULT_ADDR
+              value: https://vault.example.com
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: aws_secret_access_key
+                  name: vault-snapshot-credentials
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: aws_access_key_id
+                  name: vault-snapshot-credentials
+              image: ghcr.io/adfinis/vault-snapshot:0.1.-0
+            volumeMounts:
+              - name: snapshot-dir
+                mountPath: /vault-snaphots
+            imagePullPolicy: IfNotPresent
+          volumes:
+          - name: snapshot-dir
+            emptyDir: {}
