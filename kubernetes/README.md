@@ -1,6 +1,6 @@
 # Cronjob for snapshotting Vault running on Kubernetes
 
-This assumes kubernetes authentication backend is configured on vault.
+This assumes the Kubernetes authentication backend is configured in Vault.
 
 The container image being used in this cronjob, is authenticating to Vault with the kubernetes authentication backend, with its serviceaccount JWT.
 
