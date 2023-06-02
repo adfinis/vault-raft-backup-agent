@@ -9,4 +9,4 @@ RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VER
     mv vault /usr/local/bin && rm  vault*zip  && \
     apk add s3cmd && chmod +x entrypoint.sh
 
-ENTRYPOINT /entrypoint.sh
+CMD ["/vault-snapshot.sh"]
