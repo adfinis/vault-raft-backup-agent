@@ -2,7 +2,7 @@
 
 This assumes the Kubernetes authentication backend is configured in Vault.
 
-The container image being used in this cronjob, is authenticating to Vault with the kubernetes authentication backend, with its serviceaccount JWT.
+The script being executed in this cronjob, is authenticating with Vault using the Kubernetes authentication backend, via its serviceaccount JWT.
 
 The role and policy being used must be created before hand and must be used by the cronjob.
 
