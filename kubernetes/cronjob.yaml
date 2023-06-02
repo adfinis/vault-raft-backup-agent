@@ -21,7 +21,7 @@ spec:
             app.kubernetes.io/version: v0.1.0
         spec:
           automountServiceAccountToken: true
-          serviceAccountName: vault-raft-backup
+          serviceAccountName: vault-raft-snapshot
           containers:
           - name: vault-snapshot
             env:
@@ -46,7 +46,10 @@ spec:
                   key: aws_access_key_id
                   name: vault-snapshot-credentials
               image: ghcr.io/adfinis/vault-snapshot:0.1.-0
+            volumeMounts:
+              - name: snapshot-dir
+                mountPath: /vault-snaphots
             imagePullPolicy: IfNotPresent
-            volumes:
-            - name: backup-dir
-              emptyDir: {}
+          volumes:
+          - name: snapshot-dir
+            emptyDir: {}
