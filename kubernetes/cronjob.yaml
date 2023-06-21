@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: vault-snapshot
-    app.kubernetes.io/version: v0.1.0
+    app.kubernetes.io/version: v0.1.2
   name: vault-snapshot
 spec:
   schedule: 0 4 * * *
@@ -12,13 +12,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: vault-snapshot
-        app.kubernetes.io/version: v0.1.0
+        app.kubernetes.io/version: v0.1.2
     spec:
       template:
         metadata:
           labels:
             app.kubernetes.io/name: vault-snapshot
-            app.kubernetes.io/version: v0.1.0
+            app.kubernetes.io/version: v0.1.2
         spec:
           restartPolicy: never
           automountServiceAccountToken: true
@@ -46,10 +46,10 @@ spec:
                 secretKeyRef:
                   key: aws_access_key_id
                   name: vault-snapshot-credentials
-            image: ghcr.io/adfinis/vault-snapshot:0.1.0
+            image: ghcr.io/adfinis/vault-snapshot:0.1.2
             volumeMounts:
               - name: snapshot-dir
-                mountPath: /vault-snaphots
+                mountPath: /vault-snapshots
             imagePullPolicy: IfNotPresent
           volumes:
           - name: snapshot-dir
