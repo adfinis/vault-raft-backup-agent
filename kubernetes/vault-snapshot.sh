@@ -6,10 +6,6 @@ export JWT
 VAULT_TOKEN=$(vault write -field=token  auth/kubernetes/login role="${VAULT_ROLE}" jwt="${JWT}")
 export VAULT_TOKEN
 
-# use the leader node as VAULT_ADDR
-VAULT_ADDR=$(vault status -format=yaml | grep -Eo '^leader_addr.*' | awk '{print $2}')
-export VAULT_ADDR
-
 # create snapshot
 
 vault operator raft snapshot save /vault-snapshots/vault_"$(date +%F-%H%M)".snapshot
