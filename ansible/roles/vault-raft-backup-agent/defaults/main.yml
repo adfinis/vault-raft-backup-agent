@@ -65,13 +65,6 @@ vault_snapshot_approle_secretid_file: '{{ vault_snapshot_config_dir }}/snap-secr
 # https://www.vaultproject.io/docs/agent/autoauth/methods/approle#remove_secret_id_file_after_reading
 remove_secret_id_file_after_reading: yes
 
-# Location of the Vault token, ideally a ramdisk, see also:
-# https://www.vaultproject.io/docs/agent/autoauth/sinks/file
-vault_snapshot_token_location: '/run/vault-snap-agent/token'
-# Set to 0000 to prevent Vault from modifying the file mode
-# The file is currently written with 0640 permissions as default
-vault_snapshot_token_mode: '0000'
-
 # Snapshot output directory
 vault_snapshot_dir: '/opt/vault/snapshots'
 # Snapshot file name format
