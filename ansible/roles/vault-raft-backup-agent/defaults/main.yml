@@ -84,3 +84,11 @@ vault_snapshot_retention_find_mode: 'mtime'
 vault_snapshot_retention_time: '+7'
 # Action to take on expired files
 vault_snapshot_retention_find_action: 'rm'
+
+# Location of the Vault listener socket:
+# https://developer.hashicorp.com/vault/docs/agent#example-configuration
+vault_snapshot_listener: '/run/vault-snap-agent/socket'
+vault_snapshot_listener_protocol: 'unix'
+# can also be a tcp listner
+#vault_snapshot_listener_protocol: 'http'
+#vault_snapshot_listener: '127.0.0.1:8222'

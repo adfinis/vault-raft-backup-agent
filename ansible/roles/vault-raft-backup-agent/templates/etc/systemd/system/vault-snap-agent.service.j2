@@ -3,7 +3,7 @@ Description={{ vault_snapshot_systemd_timer_description }}
 
 [Service]
 Type=oneshot
-Environment=VAULT_ADDR=http://127.0.0.1:8222
+Environment=VAULT_ADDR={{ vault_snapshot_listener_protocol }}://{{ vault_snapshot_listener }}
 ExecStart=/bin/sh -c '{{ vault_bin_path }}/vault operator raft snapshot save "{{ vault_snapshot_dir }}/{{ vault_snapshot_file_name }}"'
 ExecStartPost=/bin/sh -c 'find {{ vault_snapshot_dir }}/* -{{ vault_snapshot_retention_find_mode }} {{ vault_snapshot_retention_time }} -exec {{ vault_snapshot_retention_find_action }} {} \;'
 

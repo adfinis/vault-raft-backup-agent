@@ -25,7 +25,8 @@ cache {
 listener "tcp" {
   # Expose Vault-API seperately
   # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
-  address = "127.0.0.1:8222"
+  address = "{{ vault_snapshot_listener }}"
+  tls_disable = true
 }
 
 auto_auth {
