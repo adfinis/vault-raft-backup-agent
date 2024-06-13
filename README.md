@@ -127,7 +127,7 @@ cat << 'EOF' > /usr/local/bin/vault-snapshot
 #  - /etc/vault.d/vault_snapshot_agent.hcl
 #  - /etc/systemd/system/vault-agent.service
 
-VAULT_ADDR="http://127.0.0.1:8222" \
+VAULT_ADDR="VAULT_ADDR=unix:///etc/vault.d/agent.sock" \
 /usr/local/bin/vault operator raft snapshot save "/opt/vault/snapshots/vault-raft_$(date +%F-%H%M).snapshot"
 EOF
 ```
