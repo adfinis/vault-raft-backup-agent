@@ -16,16 +16,16 @@ vault {
   tls_skip_verify = "{{ vault_tls_skip_verify | ternary('true', 'false') }}"
 }
 
-cache {
+api_proxy {
   # Authenticate all requests automatically with the auto_auth token
-  # https://developer.hashicorp.com/vault/docs/agent/caching
+  # https://developer.hashicorp.com/vault/docs/agent-and-proxy/proxy/apiproxy
   use_auto_auth_token = true
 }
 
-listener "tcp" {
+listener "unix" {
   # Expose Vault-API seperately
   # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
-  address = "{{ vault_snapshot_listener }}"
+  address = "{{ vault_snapshot_listener_socket }}"
   tls_disable = true
 }
 
