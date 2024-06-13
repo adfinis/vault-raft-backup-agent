@@ -16,6 +16,18 @@ vault {
   tls_skip_verify = "{{ vault_tls_skip_verify | ternary('true', 'false') }}"
 }
 
+cache {
+  # Authenticate all requests automatically with the auto_auth token
+  # https://developer.hashicorp.com/vault/docs/agent/caching
+  use_auto_auth_token = true
+}
+
+listener "tcp" {
+  # Expose Vault-API seperately
+  # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
+  address = "127.0.0.1:8222"
+}
+
 auto_auth {
   method {
     # Authenticate with AppRole
@@ -27,17 +39,5 @@ auto_auth {
       secret_id_file_path = "{{ vault_snapshot_approle_secretid_file }}"
       remove_secret_id_file_after_reading = {{ remove_secret_id_file_after_reading | bool | lower }}
     }
-  }
-
-  cache {
-    # Authenticate all requests automatically with the auto_auth token
-    # https://developer.hashicorp.com/vault/docs/agent/caching
-    use_auto_auth_token = true
-  }
-
-  listener "tcp" {
-    # Expose Vault-API seperately
-    # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
-    address = "127.0.0.1:8222"
   }
 }
