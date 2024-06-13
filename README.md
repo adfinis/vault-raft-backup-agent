@@ -41,15 +41,28 @@ chmod 0640 /etc/vault.d/snap-{roleid,secretid}
 chown vault:vault /etc/vault.d/snap-{roleid,secretid}
 ```
 
-## Vault Agent Configuration
+## Vault Proxy Configuration
 
-Configure the vault agent for the snapshots:
+Configure the vault proxy for the snapshots:
 ```bash
 cat << EOF > /etc/vault.d/vault_snapshot_agent.hcl
 # Vault agent configuration for Raft snapshots
 
 vault {
   address = "https://$HOSTNAME:8200"
+}
+
+api_proxy {
+  # Authenticate all requests automatically with the auto_auth token
+  # https://developer.hashicorp.com/vault/docs/agent-and-proxy/proxy/apiproxy
+  use_auto_auth_token = true
+}
+
+listener "unix" {
+  # Expose Vault-API seperately
+  # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
+  address = "/etc/vault.d/agent.sock"
+  tls_disable = true
 }
 
 auto_auth {
@@ -63,18 +76,6 @@ auto_auth {
       secret_id_file_path = "/etc/vault.d/snap-secretid"
       remove_secret_id_file_after_reading = false
     }
-  }
-
-  cache {
-    # Authenticate all requests automatically with the auto_auth token
-    # https://developer.hashicorp.com/vault/docs/agent/caching
-    use_auto_auth_token = true
-  }
-
-  listener "tcp" {
-    # Expose Vault-API seperately
-    # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
-    address = "127.0.0.1:8222"
   }
 }
 EOF
@@ -93,7 +94,7 @@ ConditionFileNotEmpty=/etc/vault.d/vault.hcl
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/local/bin/vault agent -config=/etc/vault.d/vault_snapshot_agent.hcl
+ExecStart=/usr/local/bin/vault proxy -config=/etc/vault.d/vault_snapshot_agent.hcl
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 User=vault
