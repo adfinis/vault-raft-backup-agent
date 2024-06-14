@@ -41,15 +41,28 @@ chmod 0640 /etc/vault.d/snap-{roleid,secretid}
 chown vault:vault /etc/vault.d/snap-{roleid,secretid}
 ```
 
-## Vault Agent Configuration
+## Vault Proxy Configuration
 
-Configure the vault agent for the snapshots:
+Configure the vault proxy for the snapshots:
 ```bash
 cat << EOF > /etc/vault.d/vault_snapshot_agent.hcl
 # Vault agent configuration for Raft snapshots
 
 vault {
   address = "https://$HOSTNAME:8200"
+}
+
+api_proxy {
+  # Authenticate all requests automatically with the auto_auth token
+  # https://developer.hashicorp.com/vault/docs/agent-and-proxy/proxy/apiproxy
+  use_auto_auth_token = true
+}
+
+listener "unix" {
+  # Expose Vault-API seperately
+  # https://developer.hashicorp.com/vault/docs/agent/caching#configuration-listener
+  address = "/etc/vault.d/agent.sock"
+  tls_disable = true
 }
 
 auto_auth {
@@ -62,18 +75,6 @@ auto_auth {
       role_id_file_path = "/etc/vault.d/snap-roleid"
       secret_id_file_path = "/etc/vault.d/snap-secretid"
       remove_secret_id_file_after_reading = false
-    }
-  }
-
-  sink {
-    # write Vault token to file
-    # https://www.vaultproject.io/docs/agent/autoauth/sinks/file
-    type = "file"
-
-    config = {
-      # best practice to write the file to a ramdisk (0640)
-      # have a look at wrapped token for advanced configuration
-      path = "/run/vault-snap-agent/token"
     }
   }
 }
@@ -93,7 +94,7 @@ ConditionFileNotEmpty=/etc/vault.d/vault.hcl
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/local/bin/vault agent -config=/etc/vault.d/vault_snapshot_agent.hcl
+ExecStart=/usr/local/bin/vault proxy -config=/etc/vault.d/vault_snapshot_agent.hcl
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 User=vault
@@ -126,7 +127,7 @@ cat << 'EOF' > /usr/local/bin/vault-snapshot
 #  - /etc/vault.d/vault_snapshot_agent.hcl
 #  - /etc/systemd/system/vault-agent.service
 
-VAULT_TOKEN=$(cat /run/vault-snap-agent/token) VAULT_ADDR="https://$HOSTNAME:8200" \
+VAULT_ADDR="VAULT_ADDR=unix:///etc/vault.d/agent.sock" \
 /usr/local/bin/vault operator raft snapshot save "/opt/vault/snapshots/vault-raft_$(date +%F-%H%M).snapshot"
 EOF
 ```

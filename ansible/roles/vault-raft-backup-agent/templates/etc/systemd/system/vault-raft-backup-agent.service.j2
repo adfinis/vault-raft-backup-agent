@@ -5,13 +5,13 @@ After=network-online.target
 
 [Service]
 Restart=on-failure
-ExecStart={{ vault_bin_path }}/vault agent -config={{ vault_snapshot_agent_config_file }}
+ExecStart={{ vault_bin_path }}/vault proxy -config={{ vault_snapshot_agent_config_file }}
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 User={{ vault_user }}
 Group={{ vault_group }}
 RuntimeDirectoryMode=0750
-RuntimeDirectory=vault-snap-agent
+RuntimeDirectory={{ vault_snapshot_run_dir }}
 
 [Install]
 WantedBy=multi-user.target

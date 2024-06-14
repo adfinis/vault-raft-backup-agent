@@ -6,6 +6,10 @@ vault_snapshot_config_dir: '/etc/vault.d'
 vault_snapshot_pid_file_name: 'vault-raft-backup-agent.pid'
 # Location of pid file
 vault_snapshot_pid_dir: '{{ vault_snapshot_config_dir }}'
+# Systemd runtime directory
+vault_snapshot_run_dir: 'vault-raft-backup-agent'
+# Vault agent listener unix socket
+vault_snapshot_listener_socket: '{{ vault_snapshot_config_dir }}/agent.sock'
 
 # Vault API address
 vault_address: '127.0.0.1'
@@ -64,13 +68,6 @@ vault_snapshot_approle_secretid_file: '{{ vault_snapshot_config_dir }}/snap-secr
 # of removing the secret ID file after it's been read:
 # https://www.vaultproject.io/docs/agent/autoauth/methods/approle#remove_secret_id_file_after_reading
 remove_secret_id_file_after_reading: yes
-
-# Location of the Vault token, ideally a ramdisk, see also:
-# https://www.vaultproject.io/docs/agent/autoauth/sinks/file
-vault_snapshot_token_location: '/run/vault-snap-agent/token'
-# Set to 0000 to prevent Vault from modifying the file mode
-# The file is currently written with 0640 permissions as default
-vault_snapshot_token_mode: '0000'
 
 # Snapshot output directory
 vault_snapshot_dir: '/opt/vault/snapshots'
