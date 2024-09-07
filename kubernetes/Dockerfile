@@ -1,6 +1,6 @@
 FROM alpine
 
-ARG VAULT_VERSION=1.13.2
+ARG VAULT_VERSION=1.16.3
 
 COPY vault-snapshot.sh /
 
