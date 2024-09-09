@@ -18,9 +18,9 @@ if [ "${S3_EXPIRE_DAYS}" ]; then
         createDate=$(echo "$line" | awk '{print $1" "$2}')
         createDate=$(date -d"$createDate" +%s)
         olderThan=$(date --date "${S3_EXPIRE_DAYS} days ago" +%s)
-        if [ $createDate -lt $olderThan ]; then
+        if [ "$createDate" -lt "$olderThan" ]; then
             fileName=$(echo "$line" | awk '{print $4}')
-            if [ $fileName != "" ]; then
+            if [ "$fileName" != "" ]; then
                 s3cmd del "${S3_URI}/$fileName" --host="${S3_HOST}" --host-bucket="${S3_BUCKET}"
             fi
         fi
