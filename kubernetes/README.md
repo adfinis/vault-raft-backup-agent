@@ -32,3 +32,13 @@ to avoid any modification before `$S3_EXPIRE_DAYS`:
 ```
 mc retention set --default GOVERNANCE "${S3_EXPIRE_DAYS}d" my-s3-remote/my-bucket
 ```
+
+On removal by the `vault-snapshot.sh` script, [`DEL` deletion marker
+(tombstone)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-managing.html#object-lock-managing-delete-markers)
+is set:
+
+```
+mc ls --versions my-snapshots/vault-snapshots-2f848f
+[2024-09-09 09:07:46 CEST]     0B X/1031980658232456253 v2 DEL vault_2024-09-06-1739.snapshot
+[2024-09-06 19:39:49 CEST]  28KiB Standard 1031052557042383613 v1 PUT vault_2024-09-06-1739.snapshot
+```
