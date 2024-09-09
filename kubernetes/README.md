@@ -42,3 +42,12 @@ mc ls --versions my-snapshots/vault-snapshots-2f848f
 [2024-09-09 09:07:46 CEST]     0B X/1031980658232456253 v2 DEL vault_2024-09-06-1739.snapshot
 [2024-09-06 19:39:49 CEST]  28KiB Standard 1031052557042383613 v1 PUT vault_2024-09-06-1739.snapshot
 ```
+
+Use [`mc
+undo`](https://min.io/docs/minio/linux/reference/minio-mc/mc-undo.html) to undo
+the `DEL` operation:
+```
+mc undo my-snapshots/vault-snapshots-2f848f/vault_2024-09-06-1739.snapshot
+mc ls --versions my-snapshots/vault-snapshots-2f848f
+[2024-09-06 19:39:49 CEST]  28KiB Standard 1031052557042383613 v1 PUT vault_2024-09-06-1739.snapshot
+```
