@@ -17,7 +17,7 @@ if [ "${S3_EXPIRE_DAYS}" ]; then
     s3cmd ls "${S3_URI}" --host="${S3_HOST}" --host-bucket="${S3_BUCKET}" | while read -r line; do
         createDate=$(echo "$line" | awk '{print $1" "$2}')
         createDate=$(date -d"$createDate" +%s)
-        olderThan=$(date --date @$((`date +%s` - 86400*$S3_EXPIRE_DAYS)) +%s)
+        olderThan=$(date --date @$(($(date +%s$) - 86400*$S3_EXPIRE_DAYS)) +%s)
         if [ "$createDate" -lt "$olderThan" ]; then
             fileName=$(echo "$line" | awk '{print $4}')
             if [ "$fileName" != "" ]; then
