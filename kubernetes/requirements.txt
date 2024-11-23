@@ -1,2 +1,5 @@
-boto3
 hvac
+boto3
+moto[s3]
+pytest
+coverage

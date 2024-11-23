@@ -51,3 +51,25 @@ mc undo my-snapshots/vault-snapshots-2f848f/vault_2024-09-06-1739.snapshot
 mc ls --versions my-snapshots/vault-snapshots-2f848f
 [2024-09-06 19:39:49 CEST]  28KiB Standard 1031052557042383613 v1 PUT vault_2024-09-06-1739.snapshot
 ```
+
+## Development and tests
+
+Requirements for running the mock server (`vault_server_mock.py`):
+* HashiCorp Vault or OpenBao (`vault` binary)
+
+To prepare the environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the tests w/o coverage:
+```bash
+pytest
+```
+
+Run the tests with coverage:
+```bash
+coverage run .venv/bin/pytest
+```
