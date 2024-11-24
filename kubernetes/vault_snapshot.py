@@ -79,7 +79,7 @@ class VaultSnapshot:
         ####VAULT_TOKEN=$(vault write -field=token  auth/kubernetes/login role="${VAULT_ROLE}" jwt="${JWT}")
         #Kubernetes(hvac_client.adapter).login(role=role, jwt=jwt)
 
-        self.logger.debug(f"Connecting to Vault API {self.vault_addr}")
+        self.logger.info(f"Connecting to Vault API {self.vault_addr}")
         self.hvac_client = hvac.Client(url=self.vault_addr)
         self.hvac_client.token = self.vault_token
 
@@ -97,11 +97,11 @@ class VaultSnapshot:
         with self.hvac_client.sys.take_raft_snapshot() as resp:
             assert resp.ok
 
-            self.logger.debug("Raft snapshot status code: %d" % resp.status_code)
+            self.logger.info("Raft snapshot status code: %d" % resp.status_code)
 
             date_str = datetime.datetime.now(datetime.UTC).strftime("%F-%H%M")
             file_name = "vault_%s.snapshot" % (date_str)
-            self.logger.debug(f"File name: {file_name}")
+            self.logger.info(f"File name: {file_name}")
 
             # Upload the file
             # * https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/put_object.html
@@ -111,7 +111,7 @@ class VaultSnapshot:
                     Bucket=self.s3_bucket,
                     Key=file_name,
                 )
-                self.logger.debug("s3 put_object response: %s", response)
+                self.logger.info("s3 put_object response: %s", response)
             except ClientError as e:
                 logging.error(e)
 
@@ -123,7 +123,7 @@ class VaultSnapshot:
                             aws_secret_access_key=self.s3_secret_access_key)
         bucket = s3.Bucket(self.s3_bucket)
         for key in bucket.objects.all():
-            self.logger.debug(key.key)
+            self.logger.info(key.key)
             # todo: do the S3_EXPIRE_DAYS magic
 
         return file_name

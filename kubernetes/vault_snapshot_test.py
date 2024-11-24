@@ -1,11 +1,17 @@
+import logging
+from io import BytesIO
+import tarfile
 import pytest
 import boto3
 import hvac
+import time
 from moto import mock_aws
 from unittest.mock import patch, create_autospec
 
 from vault_snapshot import VaultSnapshot
 from vault_server_mock import VaultServer
+
+logger = logging.getLogger(__name__)
 
 class TestVaultSnapshots:
     """
@@ -21,6 +27,10 @@ class TestVaultSnapshots:
         self.mock.reset_data()
         # run mock
         self.mock.run()
+        # configure Vault with auth backend
+        time.sleep(3)
+        self.mock.init_hvac_client()
+        self.mock.setup_kubernetes_auth()
         # return process status, 'None' means process is still running
         yield self.mock.status()
         # when tests are done, teardown the Vault server
@@ -52,9 +62,12 @@ class TestVaultSnapshots:
         )
         file_name = vault_snapshot.snapshot()
 
-        body = conn.Object(bucket_name,
-                           file_name).get()#["Body"].read()#.decode("utf-8")
+        s3obj = conn.Object(bucket_name, file_name).get()
+        body = s3obj["Body"]
+        file_obj = BytesIO(body.read())
 
-        #print(body)
-    
-        #assert body == "is awesome" 
+        snapshot_files = tarfile.open(fileobj=file_obj).getmembers()
+        for f in snapshot_files:
+            logger.info(f"- {f}")
+
+        assert len(snapshot_files) >= 4
