@@ -30,8 +30,8 @@ spec:
               value: s3.example.com
             - name: S3_BUCKET
               value: bucketname
-              # leave empty to retain snapshot files (default)
             - name: S3_EXPIRE_DAYS
+              # remove this variable to retain all snapshots (default)
               value:
             - name: VAULT_ROLE
               value: vault-snapshot
