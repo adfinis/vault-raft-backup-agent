@@ -71,7 +71,6 @@ class TestVaultSnapshots:
 
         vault_snapshot = VaultSnapshot(
             vault_addr="http://127.0.0.1:8200",
-            # the mock server assumes a "default" role
             vault_role="default",
             jwt_secret_path="./vault_snapshot/fixtures/jwt",
             s3_access_key_id="test",
@@ -117,7 +116,6 @@ class TestVaultSnapshots:
 
         vault_snapshot = VaultSnapshot(
             vault_addr="http://127.0.0.1:8200",
-            # the mock server assumes a "default" role
             vault_role="default",
             jwt_secret_path="./vault_snapshot/fixtures/jwt",
             s3_access_key_id=s3_access_key_id,
