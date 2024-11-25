@@ -11,13 +11,16 @@ After the snapshot is created in a temporary directory, `s3cmd` is used to sync 
 ## Configuration over environment variables
 
 * `VAULT_ADDR`  - Vault address to access
+* `VAULT_TOKEN` - optional Vault token (if provided, overrules `VAULT_ROLE`)
 * `VAULT_ROLE` - Vault role to use to create the snapshot
-* `S3_URI` - S3 URI to use to upload (s3://xxx)
 * `S3_BUCKET` - S3 bucket to point to
 * `S3_HOST` - S3 endpoint
 * `S3_EXPIRE_DAYS` - Delete files older than this threshold (expired)
 * `AWS_ACCESS_KEY_ID` - Access key to use to access S3
 * `AWS_SECRET_ACCESS_KEY` - Secret access key to use to access S3
+* `JWT_SECRET_PATH` - Path to JWT token for authentication against
+  `VAULT_ROLE`. Defaults to
+  `/var/run/secrets/kubernetes.io/serviceaccount/token`
 
 ## Configuration of file retention (pruning)
 
