@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 import hvac
 import os
 from pathlib import Path
-import datetime
+from datetime import UTC, datetime, timedelta
 
 class VaultSnapshot:
     """
@@ -68,6 +68,13 @@ class VaultSnapshot:
         else:
             raise NameError("S3_BUCKET undefined")
 
+        if "s3_expire_days" in kwargs:
+            self.s3_expire_days = kwargs["s3_expire_days"]
+        elif "S3_EXPIRE_DAYS" in os.environ:
+            self.s3_expire_days = os.environ["S3_EXPIRE_DAYS"]
+        else:
+            self.s3_expire_days = -1
+
         if "jwt_secret_path" in kwargs:
             self.jwt_secret_path = kwargs["jwt_secret_path"]
         elif "JWT_SECRET_PATH" in os.environ:
@@ -118,7 +125,7 @@ class VaultSnapshot:
 
             self.logger.info("Raft snapshot status code: %d" % resp.status_code)
 
-            date_str = datetime.datetime.now(datetime.UTC).strftime("%F-%H%M")
+            date_str = datetime.now(UTC).strftime("%F-%H%M")
             file_name = "vault_%s.snapshot" % (date_str)
             self.logger.info(f"File name: {file_name}")
 
@@ -140,10 +147,16 @@ class VaultSnapshot:
                             endpoint_url=self.s3_host,
                             aws_access_key_id=self.s3_access_key_id,
                             aws_secret_access_key=self.s3_secret_access_key)
-        bucket = s3.Bucket(self.s3_bucket)
-        for key in bucket.objects.all():
-            self.logger.info(key.key)
-            # todo: do the S3_EXPIRE_DAYS magic
+        objs = self.s3_client.list_objects(Bucket=self.s3_bucket)["Contents"]
+        #self.logger.info(objs)
+
+        for o in objs:
+            self.logger.info(f"LastModified: {o["LastModified"]}")
+            # expire keys when older than S3_EXPIRE_DAYS
+            if self.s3_expire_days >= 0:
+                if o["LastModified"] <= datetime.now(UTC) - timedelta(days=self.s3_expire_days):
+                    self.logger.info(f"Deleting expired snapshot {o["Key"]}")
+                    s3.Object(self.s3_bucket, o["Key"]).delete()
 
         return file_name
 
