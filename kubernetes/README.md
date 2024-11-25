@@ -54,8 +54,8 @@ mc ls --versions my-snapshots/vault-snapshots-2f848f
 
 ## Development and tests
 
-Requirements for running the mock server (`vault_server_mock.py`):
-* HashiCorp Vault or OpenBao (`vault` binary)
+Vault API requests are mocked with
+[requests-mock](https://requests-mock.readthedocs.io).
 
 To prepare the environment:
 ```bash
