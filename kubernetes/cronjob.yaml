@@ -30,8 +30,6 @@ spec:
               value: s3.example.com
             - name: S3_BUCKET
               value: bucketname
-            - name: S3_URI
-              value: s3://bucketname
               # leave empty to retain snapshot files (default)
             - name: S3_EXPIRE_DAYS
               value:
