@@ -1,12 +1,4 @@
-FROM alpine
+FROM docker.io/python:3.9 
 
-ARG VAULT_VERSION=1.16.3
-
-COPY vault-snapshot.sh /
-
-RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
-    unzip vault_${VAULT_VERSION}_linux_amd64.zip && \ 
-    mv vault /usr/local/bin && rm  vault*zip  && \
-    apk add s3cmd && chmod +x vault-snapshot.sh
-
-CMD ["/vault-snapshot.sh"]
+COPY vault_snapshot /
+CMD ["/vault_snapshot/vault_snapshot.py"]
