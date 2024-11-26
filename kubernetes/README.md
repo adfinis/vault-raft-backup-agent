@@ -11,8 +11,9 @@ After the snapshot is created in a temporary directory, `s3cmd` is used to sync 
 ## Configuration over environment variables
 
 * `VAULT_ADDR`  - Vault address to access
-* `VAULT_TOKEN` - optional Vault token (if provided, overrules `VAULT_ROLE`)
-* `VAULT_ROLE` - Vault role to use to create the snapshot
+* `VAULT_TOKEN` - Vault token (if provided, overrules `VAULT_ROLE`)
+* `VAULT_SKIP_VERIFY` - optional, set to any value to skip TLS verification
+* `VAULT_ROLE` - Vault role to create the snapshot. Required when no `VAULT_TOKEN`.
 * `S3_BUCKET` - S3 bucket to point to
 * `S3_HOST` - S3 endpoint
 * `S3_EXPIRE_DAYS` - Delete files older than this threshold (expired)

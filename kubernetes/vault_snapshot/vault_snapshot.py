@@ -29,6 +29,13 @@ class VaultSnapshot:
         else:
             raise NameError("VAULT_ADDR undefined")
 
+        if "vault_skip_verify" in kwargs:
+            self.verify = False
+        elif "VAULT_SKIP_VERIFY" in os.environ:
+            self.verify = False
+        else:
+            self.verify = True
+
         if "vault_token" in kwargs:
             self.vault_token = kwargs["vault_token"]
         elif "VAULT_TOKEN" in os.environ:
@@ -91,7 +98,8 @@ class VaultSnapshot:
                          aws_secret_access_key=self.s3_secret_access_key)
 
         self.logger.info(f"Connecting to Vault API {self.vault_addr}")
-        self.hvac_client = hvac.Client(url=self.vault_addr)
+        self.hvac_client = hvac.Client(url=self.vault_addr,
+                                       verify=self.verify)
 
         # try setting VAULT_TOKEN if exists
         if hasattr(self, "vault_token") and len(self.vault_token) > 0:
@@ -153,8 +161,8 @@ class VaultSnapshot:
         for o in objs:
             self.logger.info(f"LastModified: {o['LastModified']}")
             # expire keys when older than S3_EXPIRE_DAYS
-            if self.s3_expire_days >= 0:
-                if o["LastModified"] <= datetime.now(UTC) - timedelta(days=self.s3_expire_days):
+            if int(self.s3_expire_days) >= 0:
+                if o["LastModified"] <= datetime.now(UTC) - timedelta(days=int(self.s3_expire_days)):
                     self.logger.info(f"Deleting expired snapshot {o['Key']}")
                     s3.Object(self.s3_bucket, o["Key"]).delete()
 
