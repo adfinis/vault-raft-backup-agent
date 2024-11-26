@@ -36,7 +36,7 @@ to avoid any modification before `$S3_EXPIRE_DAYS`:
 mc retention set --default GOVERNANCE "${S3_EXPIRE_DAYS}d" my-s3-remote/my-bucket
 ```
 
-On removal by the `vault-snapshot.sh` script, [`DEL` deletion marker
+On removal by the script, [`DEL` deletion marker
 (tombstone)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-managing.html#object-lock-managing-delete-markers)
 is set:
 
