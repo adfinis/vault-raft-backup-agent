@@ -151,14 +151,15 @@ class VaultSnapshot:
         #self.logger.info(objs)
 
         for o in objs:
-            self.logger.info(f"LastModified: {o["LastModified"]}")
+            self.logger.info(f"LastModified: {o['LastModified']}")
             # expire keys when older than S3_EXPIRE_DAYS
             if self.s3_expire_days >= 0:
                 if o["LastModified"] <= datetime.now(UTC) - timedelta(days=self.s3_expire_days):
-                    self.logger.info(f"Deleting expired snapshot {o["Key"]}")
+                    self.logger.info(f"Deleting expired snapshot {o['Key']}")
                     s3.Object(self.s3_bucket, o["Key"]).delete()
 
         return file_name
 
 if __name__=="__main__":
-    VaultSnapshot.snapshot()
+    vault_snapshot = VaultSnapshot()
+    vault_snapshot.snapshot()
