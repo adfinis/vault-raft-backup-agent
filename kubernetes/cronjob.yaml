@@ -32,7 +32,7 @@ spec:
               value: bucketname
             - name: S3_EXPIRE_DAYS
               # remove this variable to retain all snapshots (default)
-              value:
+              value: "90"
             - name: VAULT_ROLE
               value: vault-snapshot
             - name: VAULT_ADDR
