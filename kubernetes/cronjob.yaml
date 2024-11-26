@@ -20,7 +20,7 @@ spec:
             app.kubernetes.io/name: vault-snapshot
             app.kubernetes.io/version: v0.1.0
         spec:
-          restartPolicy: never
+          restartPolicy: Never
           automountServiceAccountToken: true
           serviceAccountName: vault-raft-snapshot
           containers:
