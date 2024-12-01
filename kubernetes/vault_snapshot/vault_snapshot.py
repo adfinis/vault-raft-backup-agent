@@ -168,6 +168,6 @@ class VaultSnapshot:
 
         return file_name
 
-if __name__=="__main__":
+if __name__ == "__main__":
     vault_snapshot = VaultSnapshot()
     vault_snapshot.snapshot()
