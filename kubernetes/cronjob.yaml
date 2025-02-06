@@ -20,7 +20,7 @@ spec:
             app.kubernetes.io/name: vault-snapshot
             app.kubernetes.io/version: v0.1.0
         spec:
-          restartPolicy: never
+          restartPolicy: Never
           automountServiceAccountToken: true
           serviceAccountName: vault-raft-snapshot
           containers:
@@ -30,11 +30,9 @@ spec:
               value: s3.example.com
             - name: S3_BUCKET
               value: bucketname
-            - name: S3_URI
-              value: s3://bucketname
-              # leave empty to retain snapshot files (default)
             - name: S3_EXPIRE_DAYS
-              value:
+              # remove this variable to retain all snapshots (default)
+              value: "90"
             - name: VAULT_ROLE
               value: vault-snapshot
             - name: VAULT_ADDR

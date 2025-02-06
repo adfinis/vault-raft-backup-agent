@@ -1,0 +1,7 @@
+hvac
+boto3
+moto[s3]
+requests_mock
+pytest
+coverage
+freezegun
