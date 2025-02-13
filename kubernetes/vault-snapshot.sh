@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -e
+
 # authenticate using kubernetes auth
 JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 export JWT
