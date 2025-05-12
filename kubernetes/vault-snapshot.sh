@@ -2,12 +2,19 @@
 
 set -e
 
-# authenticate using kubernetes auth
+
+# Authenticate with Vault
 JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 export JWT
-VAULT_TOKEN=$(vault write -field=token  auth/kubernetes/login role="${VAULT_ROLE}" jwt="${JWT}")
-export VAULT_TOKEN
-
+if [ "${USE_JWT_AUTH}" = "true" ]; then
+    echo "Using JWT Auth"
+    VAULT_TOKEN=$(vault write -field=token auth/jwt/login role=my-role jwt="$JWT")
+    export VAULT_TOKEN
+else
+    echo "Using Kubernetes Auth"
+    VAULT_TOKEN=$(vault write -field=token auth/kubernetes/login role="${VAULT_ROLE}" jwt="${JWT}")
+    export VAULT_TOKEN
+fi
 # create snapshot
 vault operator raft snapshot save /vault-snapshots/vault_"$(date +%F-%H%M)".snapshot
 
@@ -28,3 +35,6 @@ if [ "${S3_EXPIRE_DAYS}" ]; then
         fi
     done;
 fi
+
+
+
