@@ -35,6 +35,3 @@ if [ "${S3_EXPIRE_DAYS}" ]; then
         fi
     done;
 fi
-
-
-
