@@ -8,7 +8,7 @@ JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 export JWT
 if [ "${USE_JWT_AUTH}" = "true" ]; then
     echo "Using JWT Auth"
-    VAULT_TOKEN=$(vault write -field=token auth/jwt/login role=my-role jwt="$JWT")
+    VAULT_TOKEN=$(vault write -field=token auth/jwt/login role="${VAULT_ROLE}" jwt="$JWT")
     export VAULT_TOKEN
 else
     echo "Using Kubernetes Auth"
