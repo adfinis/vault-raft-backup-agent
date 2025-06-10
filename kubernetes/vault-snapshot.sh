@@ -33,5 +33,5 @@ if [ "${S3_EXPIRE_DAYS}" ]; then
                 s3cmd del "$fileName" --host="${S3_HOST}" --host-bucket="${S3_BUCKET}"
             fi
         fi
-    done
+    done;
 fi
