@@ -12,7 +12,7 @@ After the snapshot is created in a temporary directory, `s3cmd` is used to sync 
 
 * `VAULT_ADDR`  - Vault address to access
 * `VAULT_ROLE` - Vault role to use to create the snapshot
-* `USE_JWT_AUTH` - If set to true; the script will use JWT authentication else it will use kubernetes authentication
+* `VAULT_AUTH_PATH` - The path of the Kubernetes authentication backend in Vault (e.g. `kubernetes`)
 * `S3_URI` - S3 URI to use to upload (s3://xxx)
 * `S3_BUCKET` - S3 bucket to point to
 * `S3_HOST` - S3 endpoint

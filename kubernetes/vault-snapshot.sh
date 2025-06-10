@@ -3,7 +3,7 @@
 set -e
 
 # Set default Vault auth path if not provided
-VAULT_AUTH_PATH=${VAULT_AUTH_PATH:-auth/kubernetes/login}
+VAULT_AUTH_PATH=${VAULT_AUTH_PATH:-kubernetes}
 
 echo "Using Vault auth path: $VAULT_AUTH_PATH"
 
@@ -12,7 +12,7 @@ JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 export JWT
 
 echo "Using Vault auth path: $VAULT_AUTH_PATH"
-VAULT_TOKEN=$(vault write -field=token "$VAULT_AUTH_PATH" role="${VAULT_ROLE}" jwt="$JWT")
+VAULT_TOKEN=$(vault write -field=token "auth/$VAULT_AUTH_PATH/login" role="${VAULT_ROLE}" jwt="$JWT")
 export VAULT_TOKEN
 
 # Create snapshot
