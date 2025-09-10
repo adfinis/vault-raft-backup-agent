@@ -1,0 +1,17 @@
+[Unit]
+Description=OpenBao Snapshot Agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart={{ bao_bin_path }}/bao agent -config={{ bao_snapshot_agent_config_file }}
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+User={{ bao_user }}
+Group={{ bao_group }}
+RuntimeDirectoryMode=0750
+RuntimeDirectory={{ bao_snapshot_run_dir }}
+
+[Install]
+WantedBy=multi-user.target

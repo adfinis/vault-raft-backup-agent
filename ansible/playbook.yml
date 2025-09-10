@@ -1,5 +1,12 @@
 ---
 
-- hosts: vault
+- hosts: bao
   roles:
-    - { role: vault-raft-backup-agent, tags: vault-raft-backup-agent }
+    - { role: bao-raft-backup-agent, tags: bao-raft-backup-agent }
+  vars:
+    bao_address: bao.example.com #add port if not 443
+    bao_tls_disable: false
+    bao_bin_path: /usr/bin
+    bao_raft_bck_role_id: ''
+    bao_raft_bck_secret_id: ''
+    remove_secret_id_file_after_reading: yes

@@ -12,7 +12,7 @@ bao_snapshot_run_dir: 'bao-raft-backup-agent'
 bao_snapshot_listener_socket: '{{ bao_snapshot_config_dir }}/agent.sock'
 
 # OpenBao API address
-bao_address: '127.0.0.1'
+bao_address: '127.0.0.1:8200'
 # OpenBao API tls, choosing 'no' here will change the protocol
 # for bao_address from 'http' (default, for dev server) to 'https'
 bao_tls_disable: yes
@@ -52,7 +52,7 @@ bao_user: bao
 bao_group: bao
 
 # Path to bao binary
-bao_bin_path: '/usr/local/bin'
+bao_bin_path: '/usr/bin'
 
 # Variables for actual AppRole roleid and secretid. These variables can be defined
 # manually or generated with the terraform configuration from this repo.

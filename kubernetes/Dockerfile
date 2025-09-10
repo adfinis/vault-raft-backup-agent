@@ -1,12 +1,12 @@
 FROM alpine
 
-ARG VAULT_VERSION=1.16.3
+ARG BAO_VERSION=2.4.0
 
-COPY vault-snapshot.sh /
+COPY bao-snapshot.sh /
 
-RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
-    unzip vault_${VAULT_VERSION}_linux_amd64.zip && \ 
-    mv vault /usr/local/bin && rm  vault*zip  && \
-    apk add s3cmd && chmod +x vault-snapshot.sh
+RUN wget https://github.com/openbao/openbao/releases/download/v${BAO_VERSION}/bao_${BAO_VERSION}_Linux_x86_64.tar.gz && \
+    tar xzf bao_${BAO_VERSION}_Linux_x86_64.tar.gz && \ 
+    mv bao /usr/local/bin && rm  bao*tar.gz  && \
+    apk add s3cmd && chmod +x bao-snapshot.sh
 
-CMD ["/vault-snapshot.sh"]
+CMD ["/bao-snapshot.sh"]

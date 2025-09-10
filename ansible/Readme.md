@@ -1,15 +1,19 @@
-# Vault Raft Backup Agent - Ansible Configuration
+# OpenBao Raft Backup Agent - Ansible Configuration
 
-This directory contains Ansible instructions to deploy the Raft Backup Agent. The tasks of the role `vault-raft-backup-agent` are derived from the [description of the backup approach](../Readme.md).
+This directory contains Ansible instructions to deploy the Raft Backup Agent. The tasks of the role `bao-raft-backup-agent` are derived from the [manual configurations for Bare Metal/VMs](../docs/vm-configuration.md)).
+
+Note that the playbook will only save the snapshot to a configured directory. If you want to automatically sync those to an S3 bucket, it will need to be configured on top.
+
+It can be deployed directly on the OpenBao nodes or on a dedicated machine.
 
 ## Ansible Variables
 
-All variables of the role are documented in the file [`main.yml`](./roles/vault-raft-backup-agent/defaults/main.yml).
+All variables of the role are documented in the file [`main.yml`](./roles/bao-raft-backup-agent/defaults/main.yml).
 
-The role `vault-raft-backup-agent` assumes that the roleid and secretid are defined. The backup agent and the backup job use these variables to authenticate against the Vault:
+The role `bao-raft-backup-agent` assumes that the roleid and secretid are defined. The backup agent and the backup job use these variables to authenticate against the OpenBao:
 
-* `vault_raft_bck_role_id`: The AppRole roleid
-* `vault_raft_bck_secret_id`: The AppRole secretid
+* `bao_raft_bck_role_id`: The AppRole roleid
+* `bao_raft_bck_secret_id`: The AppRole secretid
 
 Note that the **secretid is removed by default**. Set the variable `remove_secret_id_file_after_reading: no` to alter this behavior.
 
@@ -33,4 +37,5 @@ $ systemctl list-timers
 The Ansible role comes with the following limitations:
 
 * Does not configure a cron job, only a systemd timer/service pair
-* Does not automatically [install the Vault binary](https://learn.hashicorp.com/tutorials/vault/getting-started-install)
+* Does not automatically [install the OpenBao binary](https://openbao.org/docs/install/)
+* Does not automatically configure sending snapshot to S3
