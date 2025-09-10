@@ -12,7 +12,7 @@ JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 export JWT
 
 echo "Using OpenBao auth path: $BAO_AUTH_PATH"
-BAO_TOKEN=$(bao write -field=token  auth/${BAO_AUTH_PATH}/login role="${BAO_ROLE}" jwt="${JWT}")
+BAO_TOKEN=$(bao write -field=token  auth/$BAO_AUTH_PATH/login role="${BAO_ROLE}" jwt="${JWT}")
 export BAO_TOKEN
 
 # Create snapshot
