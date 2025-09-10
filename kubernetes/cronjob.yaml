@@ -35,7 +35,7 @@ spec:
               # leave empty to retain snapshot files (default)
             - name: S3_EXPIRE_DAYS
               value:
-            - name: BAO_AUTH_METHOD
+            - name: BAO_AUTH_PATH
               value: kubernetes
             - name: BAO_ROLE
               value: bao-raft-snapshot
