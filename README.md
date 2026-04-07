@@ -1,3 +1,9 @@
+
+
+> [!CAUTION]  
+> This project has been moved to https://github.com/openbao/openbao-snapshot-agent.  
+> Development will continue within the OpenBao organization.
+
 # Vault Agent for Raft Integrated Storage Backup (draft)
 
 The problem: [Snapshot automation](https://learn.hashicorp.com/vault/operations/storage-migration-checklist#summary), "No out-of-the-box automation tool" for [Raft storage snapshots](https://www.vaultproject.io/docs/commands/operator/raft)
